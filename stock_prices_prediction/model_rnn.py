@@ -406,7 +406,6 @@ class DaRnn:
             label="Predicted V",
         )
         bv += len(predictions_v)
-        # bv = len(self.dates) - len(predictions_f)
         plt.plot(
             self.dates[bv : bv + len(predictions_f)],
             predictions_f,

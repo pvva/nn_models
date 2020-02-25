@@ -26,7 +26,7 @@ class LinearStockModel(nn.Module):
         return self.fc3(out.view(-1))
 
 
-data_frame = pd.read_csv("C:/Dev/data/DCOILWTICO.csv", parse_dates=["DATE"], sep=",")
+data_frame = pd.read_csv("./data/DCOILWTICO.csv", parse_dates=["DATE"], sep=",")
 data_frame.drop(
     data_frame[data_frame["DCOILWTICO"].str.endswith(".")].index, inplace=True
 )
