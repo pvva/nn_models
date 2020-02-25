@@ -51,7 +51,7 @@ class DaRnnEncoder(nn.Module):
                 ),
                 dim=2,
             )
-            # calculate attention weights, B*I x 1
+            # calculate attention weights, B*I x 1 (B*I x A (after .view(-1,..) -> linear layer)
             x = self.attn_linear(x.view(-1, self.attn_size))
 
             # B x I
@@ -119,12 +119,12 @@ class DaRnnDecoder(nn.Module):
                 dim=0,
             )
             # compute context
-            # if input is a (B x N x M) tensor, mat2 is a (B x M x P) tensor, out will be a (B x N x P) tensor
-            # x.unsqueeze(1) => B x 1 x T-1, input_encoded => B x T-1 x He, result => B x 1 x He => (squeze) B x He
+            # bmm: if input is a (B x N x M) tensor, mat2 is a (B x M x P) tensor, out will be a (B x N x P) tensor
+            # x.unsqueeze(1) => B x 1 x T-1, input_encoded => B x T-1 x He, result => B x 1 x He => (squeeze) B x He
             context = torch.bmm(x.unsqueeze(1), input_encoded).squeeze(1)
 
             if step < self.time_steps - 1:
-                # input is cat(B x He, B x 1) => b x He+1, result is B x 1
+                # input is cat(B x He, B x 1) => B x He+1, result is B x 1
                 t_y = self.fc(
                     torch.cat((context, y_history[:, step].unsqueeze(1)), dim=1)
                 )
@@ -153,7 +153,7 @@ class DaRnn:
         self.batch_size = batch_size
         self.__prepare_data(data_file, date_field, price_field)
         self.train_size = int(self.X.shape[0] * 0.9)
-        # target data can be normalized, but in reality optimizer also works without it
+        # target data can be normalized, but in reality optimizer also works without normalisation
         # self.Y = self.Y - np.mean(self.Y[: self.train_size])
         self.learning_rate = learning_rate
 
