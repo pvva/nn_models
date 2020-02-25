@@ -9,6 +9,8 @@ RNN.
 Data.
 Data represents simple array of prices, ordered in time.
 
+Data is taken [here](https://fred.stlouisfed.org/series/DCOILWTICO).
+
 In order for the model to be able to work with data, it is combined into 2 dimensional matrix with following structure:
 
 [
