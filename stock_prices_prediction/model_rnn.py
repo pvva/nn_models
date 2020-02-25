@@ -244,7 +244,9 @@ class DaRnn:
                 % (epoch + 1, e_loss_mean, e_loss_std, self.learning_rate)
             )
 
-            # adapt learning rate, saw pattern
+            # adapt learning rate
+            # saw pattern (slightly decreasing rate at every epoch and then every, say,
+            # 100 epochs resetting it to original rate, works worse then gradual rate decrease
             if epoch % 100 == 0 and epoch > 0:
                 self.learning_rate *= 0.98
                 self.encoder_optimizer = optim.Adam(
